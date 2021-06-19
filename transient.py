@@ -44,6 +44,7 @@ C = [0]*n
 X = [0]*n
 temp = [0]*n
 tempold = [0]*n
+
 dx = l/n
 Z = (rc*dx)/dt
 z = tk/dx
@@ -55,7 +56,7 @@ def TDMA(n, beta, D, alpha, c):
     alpha[0] = alpha[1]
     alpha[n-1] = 0
     #copy common values
-    for i in range(2, n-1):
+    for i in range(1, n-1):
         D[i] = D[1]
         beta[i] = beta[1]
         alpha[i] = alpha[1]
@@ -126,6 +127,7 @@ while choice != "q":
         #copy initial temperature
         for o in range(0, n):
             temp[o] = ti
+        tempold = temp.copy()
 
         print("Temperature values are:\n")
 
@@ -139,21 +141,24 @@ while choice != "q":
             df.loc[len(df.index)] = temp
 
             for i in range(0, n):
-                c[i] = Z*temp[i]
+                c[i] = Z*tempold[i]
 
             temp = TDMA(n, beta, D, alpha, c)
+            tempold = temp.copy()
         break
 
     #solve for crank nicolson scheme (currently it is a copy of implicit)
     elif choice == "3":
         print("\n\tCrank Nicolson Scheme\n")
-        D[0] = Z+z
-        D[1] = Z+z+z
-        D[n-1] = Z+z+z+z
-        beta[1] = z
-        alpha[1] = z
+        D[0] = Z+(z/2)
+        D[1] = Z+z
+        D[n-1] = Z+z
+        beta[1] = z/2
+        alpha[1] = z/2
+        
         for o in range(0, n):
             temp[o] = ti
+        tempold = temp.copy()
 
         print("Temperature values are:\n")
 
@@ -163,10 +168,14 @@ while choice != "q":
             print("\n")
             df.loc[len(df.index)] = temp
 
-            for i in range(0, n):
-                c[i] = Z*temp[i]
+            #set constant values
+            c[0] = (Z * tempold[0]) + (z * 0.5 * (tempold[1] - tempold[0]))
+            c[n-1] = ((Z-z)*tempold[n-1]) + (z * 0.5 * tempold[n-2])
+            for i in range(1, n-1):
+                c[i] = ((Z-z)*tempold[i]) + (z * 0.5 * (tempold[i-1]+tempold[i+1]))
 
             temp = TDMA(n, beta, D, alpha, c)
+            tempold = temp.copy()
         break
 
     elif choice == "q":
