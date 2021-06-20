@@ -1,7 +1,8 @@
 # TRANSIENT-1D-Unsteady State Diffusion solver
 ## Python code for Transient 1 Dimension Unsteady State Heat Conduction
 
-Read _[Transient.pdf](Transient.pdf)_ in the repository to understand the Transient 1D unsteady state diffusion.
+Read _[Transient.pdf](Transient.pdf)_ in the repository to understand the Transient 1D unsteady state diffusion. The **time step dt** should be selected as per the condition mentioned in the notes pdf page 4 for Explicit, page 6 for Crank Nicolson.
+
 The _governing equation_ used in the python code is
 
 ![governing equation](images/ge.PNG)
