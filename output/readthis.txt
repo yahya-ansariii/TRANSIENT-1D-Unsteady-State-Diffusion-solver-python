@@ -1,0 +1,4 @@
+This text file is made to add empty output folder to git repo.
+The transient.py code uses output folder to save the result and throws error if no output folder is present.
+Result is saved in this folder.
+Previous output will be overwritten.
