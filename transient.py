@@ -58,8 +58,6 @@ Z = (rc*dx)/dt
 z = tk/dx
 
 # Define TDMA function very specific to this numerical solver, for general tdma solver refer : https://github.com/novus-afk/TDMA-Solver
-
-
 def TDMA(n, beta, D, alpha, c):
     beta[0] = 0
     beta[n-1] = beta[1]
@@ -91,11 +89,9 @@ def EXPLICIT(temp, tempold):
         tempold[o] = ti
 
     for i in range(0, step+1):
-        print("Temperature values for time step {} are:\n" .format(i))
-        for k in range(0, n):
-            print(" T%d = %f C\t" % (k+1, temp[k]))
-        print("\n")
-        df.loc[len(df.index)] = tempold  # add data to dataframe last row
+        # add data to dataframe last row
+        df.loc[len(df.index)] = tempold 
+
         temp[0] = (((Z-z)*tempold[0])+(z*tempold[1]))/Z
 
         for j in range(1, n-1):
@@ -103,10 +99,10 @@ def EXPLICIT(temp, tempold):
                        (z*tempold[j-1])+(z*tempold[j+1]))/Z
 
         temp[n-1] = (((Z-(3*z))*tempold[n-1]) + (z*tempold[n-2]) + (2*te*z))/Z
+        # copy current temp value to old for next timestep
         tempold = temp.copy()
 
 
-# noinspection PyUnresolvedReferences
 def IMPLICIT(temp, tempold):
     # initialize data for tdma function
     D[0] = Z+z
@@ -120,12 +116,6 @@ def IMPLICIT(temp, tempold):
     tempold = temp.copy()
 
     for p in range(0, step+1):
-        print("Temperature values for time step {} are:\n" .format(p))
-        # print temp values
-        for i in range(0, n):
-            print("T%d = %f C \t" % (i+1, temp[i]))
-        print("\n")
-
         # add new temp values to the pandas dataframe(add new temperature row, similar to printing values at each time step)
         df.loc[len(df.index)] = temp
 
@@ -136,24 +126,19 @@ def IMPLICIT(temp, tempold):
 
 
 def CrankN(temp, tempold):
+    # initialize data for tdma function
     D[0] = Z+(z/2)
     D[1] = Z+z
     D[n-1] = Z+z+z/2
     beta[1] = z/2
     alpha[1] = z/2
 
+    # copy initial temperature
     for o in range(0, n):
         temp[o] = ti
     tempold = temp.copy()
 
-    print("Temperature values are:\n")
-
     for p in range(0, step+1):
-        print("Temperature values for time step {} are:\n" .format(p))
-        # print temp values
-        for i in range(0, n):
-            print("T%d = %f C \t" % (i+1, temp[i]))
-        print("\n")
         # add result to DataFrame
         df.loc[len(df.index)] = temp
 
@@ -191,7 +176,7 @@ while choice != "q":
         IMPLICIT(temp, tempold)
         break
 
-    # solve for crank nicolson scheme (currently it is a copy of implicit)
+    # solve for crank nicolson scheme
     elif choice == "3":
         print("\n\tCrank Nicolson Scheme\n")
         CrankN(temp, tempold)
