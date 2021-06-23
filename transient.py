@@ -205,7 +205,7 @@ while choice != "q":
     
         [ q ] Exit without saving result
         ''')
-    choice = input("\nEnter yout choice :\t")
+    choice = input("\nEnter your choice :\t")
     if choice == "y":
         # add time step column at the start of the DataFrame
         df.insert(0, 'Time Step.', range(0, len(df)))
