@@ -17,6 +17,8 @@ import pandas as pd
 # take user input
 print("\n \t\t TRANSIENT Solver\n")
 print("""\n\tTo learn more about Transient heat conduction read the Transient.pdf
+    
+    (The left boundary is insulated in this solver)
     """)
 n = int(input("\n\tEnter the no. of grid points :   "))
 
@@ -24,7 +26,7 @@ l = float(input("\n\tEnter length of plate in m :   "))
 
 tk = float(input("\n\tEnter thermal conductivity in W/mK or W/mC :   "))
 
-rc = float(input("\n\tEnter rhoC in J/m3K :   "))
+rc = float(input("\n\tEnter \N{GREEK SMALL LETTER RHO}C in J/m3K :   "))
 
 ti = float(input("\n\tEnter initial temperature at T = 0 sec :   "))
 
@@ -136,7 +138,7 @@ def IMPLICIT(temp, tempold):
 def CrankN(temp, tempold):
     D[0] = Z+(z/2)
     D[1] = Z+z
-    D[n-1] = Z+z
+    D[n-1] = Z+z+z/2
     beta[1] = z/2
     alpha[1] = z/2
 
@@ -152,11 +154,12 @@ def CrankN(temp, tempold):
         for i in range(0, n):
             print("T%d = %f C \t" % (i+1, temp[i]))
         print("\n")
+        # add result to DataFrame
         df.loc[len(df.index)] = temp
 
         # set constant values
         c[0] = (Z * tempold[0]) + (z * 0.5 * (tempold[1] - tempold[0]))
-        c[n-1] = ((Z-z)*tempold[n-1]) + (z * 0.5 * tempold[n-2])
+        c[n-1] = ((Z-z-z/2)*tempold[n-1]) + (z * tempold[n-2]) + (2*z * te)
         for i in range(1, n-1):
             c[i] = ((Z-z)*tempold[i]) + (z * 0.5 * (tempold[i-1]+tempold[i+1]))
 
@@ -233,4 +236,4 @@ while choice != "q":
         print("\n Invalid Choice, Try again !")
 
 
-input("Press Enter to exit")
+input("\nPress Enter to exit")
