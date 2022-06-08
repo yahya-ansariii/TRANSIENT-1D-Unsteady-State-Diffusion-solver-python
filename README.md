@@ -3,6 +3,10 @@
 
 Read _[Transient.pdf](Transient.pdf)_ in the repository to understand the Transient 1D unsteady state diffusion. The **time step dt** should be selected as per the condition mentioned in the notes Transient.pdf --> page 4 for Explicit, page 6 for Crank Nicolson.
 
+Click on the following link to checkout the video to easily use this python code.
+
+- [YOUTUBE](https://youtu.be/MhYR8-u4cUg)
+
 The _governing equation_ used in the python code is
 
 ![governing equation](images/ge.PNG)
