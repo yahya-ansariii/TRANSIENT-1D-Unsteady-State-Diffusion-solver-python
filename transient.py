@@ -50,8 +50,10 @@ temp = [0]*n
 tempold = [0]*n
 
 # create dataframe to store result in table
-df = pd.DataFrame(columns=["Node: 1", "Node: 2",
-                  "Node: 3", "Node: 4", "Node: 5"])
+header=[]
+for i in range(1,n+1):
+    header.append("Node: %i" %i)
+df = pd.DataFrame(columns=header)
 
 dx = l/n
 Z = (rc*dx)/dt
